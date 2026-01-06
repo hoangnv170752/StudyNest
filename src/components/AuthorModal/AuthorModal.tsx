@@ -19,7 +19,9 @@ export const AuthorModal: React.FC<AuthorModalProps> = ({ isOpen, onClose }) => 
         </button>
         
         <div className="author-header">
-          <div className="author-avatar">👨‍💻</div>
+          <div className="author-avatar">
+            <img src="/studynest.svg" alt="StudyNest Logo" style={{ width: '100px', height: '100px' }} />
+          </div>
           <h2 className="author-title">About the Author</h2>
           <p className="author-subtitle">Creator of StudyNest</p>
         </div>

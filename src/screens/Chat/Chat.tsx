@@ -16,7 +16,8 @@ const Chat: React.FC = () => {
     sendMessage,
     createNewConversation,
     deleteConversation,
-    selectConversation
+    selectConversation,
+    renameConversation
   } = useChat();
 
   const { theme, toggleTheme } = useTheme();
@@ -57,6 +58,7 @@ const Chat: React.FC = () => {
         onSelectConversation={selectConversation}
         onNewConversation={createNewConversation}
         onDeleteConversation={deleteConversation}
+        onRenameConversation={renameConversation}
         theme={theme}
         onThemeToggle={toggleTheme}
       />

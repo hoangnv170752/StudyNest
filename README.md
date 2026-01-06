@@ -2,28 +2,52 @@
 
 An AI-powered study assistant desktop application that runs locally with privacy-first design. Built with Electron, React, and TypeScript.
 
+## Demo
+
+<div align="center">
+  <img src="public/light-theme.png" alt="StudyNest Light Theme" width="45%">
+  <img src="public/dark-theme.png" alt="StudyNest Dark Theme" width="45%">
+</div>
+
+## Why StudyNest over Ollama PC App?
+
+StudyNest offers several advantages over the standard Ollama desktop application:
+
+- **Study-Focused Interface** - Purpose-built UI optimized for learning and research, not just generic chat
+- **Modern UX Design** - Beautiful, responsive interface with seamless light/dark theme switching
+- **Smart Prompt Suggestions** - Quick-start templates tailored for studying, research, and learning tasks
+- **Enhanced Conversation Features** - Rename conversations, better organization, and local database storage
+- **Optimized Performance** - React-based UI with smooth animations and real-time updates
+- **Customizable & Extensible** - Open architecture for adding study-specific features
+
+**Want more features?** Create an issue and I'll work on implementing your requests!
+
 ## Features
 
-### 🤖 AI Chat Interface
+### 1. AI Chat Interface
+
 - ChatGPT-like conversational interface
 - Support for local Small Language Models (SLM)
 - Offline-first architecture for complete privacy
 - Real-time message streaming
 - Conversation history management
 
-### 🎨 Modern Design System
+### 2. Modern Design System
+
 - Light and dark theme support with seamless switching
 - Material Design Icons integration
 - Responsive and accessible UI components
 - Custom design tokens for consistent styling
 
-### 🔒 Privacy-Focused
+### 3. Privacy-Focused
+
 - All data stays on your device
 - No external API calls required
 - Local LLM integration ready
 - Secure document management
 
-### 💬 Chat Features
+### 4. Chat Features
+
 - Multiple conversation threads
 - Message history with timestamps
 - Typing indicators
@@ -118,15 +142,18 @@ studynest/
 ## Technologies
 
 ### Core
+
 - **Electron** (v28.3.3) - Desktop application framework
 - **React** (v18.3.1) - UI library
 - **TypeScript** (v5.9.3) - Type-safe JavaScript
 
 ### UI & Styling
+
 - **Material Design Icons** (@mdi/react, @mdi/js) - Icon library
 - **CSS Variables** - Design tokens system
 
 ### Build Tools
+
 - **Webpack** (v5.104.1) - Module bundler
 - **electron-builder** - Application packager
 - **pnpm** - Fast, disk space efficient package manager
@@ -140,12 +167,14 @@ StudyNest is designed to work with local LLM servers. To connect your local mode
 3. Configure the model settings in `src/utils/llm.ts`
 
 Example endpoints:
+
 - **Ollama**: `http://localhost:11434/api/generate`
 - **LM Studio**: `http://localhost:1234/v1/chat/completions`
 
 ## Design System
 
 StudyNest includes a comprehensive design system with:
+
 - Color scales (white/black with opacity variants)
 - Primary colors (blue shades)
 - Spacing scale (4px to 64px)

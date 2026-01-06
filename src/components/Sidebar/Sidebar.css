@@ -76,6 +76,17 @@
   white-space: nowrap;
 }
 
+.rename-conversation {
+  opacity: 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  transition: opacity 0.2s;
+}
+
 .delete-conversation {
   opacity: 0;
   background: transparent;
@@ -87,12 +98,28 @@
   transition: opacity 0.2s;
 }
 
+.conversation-item:hover .rename-conversation,
 .conversation-item:hover .delete-conversation {
   opacity: 1;
 }
 
+.rename-conversation:hover {
+  color: var(--color-primary);
+}
+
 .delete-conversation:hover {
   color: #ff4757;
+}
+
+.conversation-rename-input {
+  flex: 1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  outline: none;
 }
 
 .sidebar-footer {

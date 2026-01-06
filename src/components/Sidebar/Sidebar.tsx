@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Icon from '@mdi/react';
-import { mdiPlus, mdiMessageText, mdiTrashCanOutline, mdiCoffee } from '@mdi/js';
+import { mdiPlus, mdiMessageText, mdiTrashCanOutline, mdiCoffee, mdiPencil } from '@mdi/js';
 import { Conversation } from '../../types/chat';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import DonationModal from '../DonationModal/DonationModal';
@@ -14,6 +14,7 @@ interface SidebarProps {
   onSelectConversation: (id: string) => void;
   onNewConversation: () => void;
   onDeleteConversation: (id: string) => void;
+  onRenameConversation: (id: string, newTitle: string) => void;
   theme: 'light' | 'dark';
   onThemeToggle: () => void;
 }
@@ -24,12 +25,34 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSelectConversation,
   onNewConversation,
   onDeleteConversation,
+  onRenameConversation,
   theme,
   onThemeToggle
 }) => {
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
   const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
   const [isHowToUseModalOpen, setIsHowToUseModalOpen] = useState(false);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState('');
+
+  const handleRenameStart = (e: React.MouseEvent, conv: Conversation) => {
+    e.stopPropagation();
+    setRenamingId(conv.id);
+    setRenameValue(conv.title);
+  };
+
+  const handleRenameSubmit = (id: string) => {
+    if (renameValue.trim()) {
+      onRenameConversation(id, renameValue.trim());
+    }
+    setRenamingId(null);
+    setRenameValue('');
+  };
+
+  const handleRenameCancel = () => {
+    setRenamingId(null);
+    setRenameValue('');
+  };
 
   return (
     <div className="sidebar">
@@ -45,10 +68,35 @@ const Sidebar: React.FC<SidebarProps> = ({
           <div
             key={conv.id}
             className={`conversation-item ${conv.id === currentConversationId ? 'active' : ''}`}
-            onClick={() => onSelectConversation(conv.id)}
+            onClick={() => renamingId !== conv.id && onSelectConversation(conv.id)}
           >
             <Icon path={mdiMessageText} size={0.7} className="conversation-icon" />
-            <div className="conversation-title">{conv.title}</div>
+            {renamingId === conv.id ? (
+              <input
+                type="text"
+                className="conversation-rename-input"
+                value={renameValue}
+                onChange={(e) => setRenameValue(e.target.value)}
+                onBlur={() => handleRenameSubmit(conv.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleRenameSubmit(conv.id);
+                  } else if (e.key === 'Escape') {
+                    handleRenameCancel();
+                  }
+                }}
+                autoFocus
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <div className="conversation-title">{conv.title}</div>
+            )}
+            <button
+              className="rename-conversation"
+              onClick={(e) => handleRenameStart(e, conv)}
+            >
+              <Icon path={mdiPencil} size={0.6} />
+            </button>
             <button
               className="delete-conversation"
               onClick={(e) => {

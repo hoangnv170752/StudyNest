@@ -209,6 +209,24 @@ export const useChat = () => {
     setCurrentConversationId(id);
   }, []);
 
+  const renameConversation = useCallback(async (id: string, newTitle: string) => {
+    const updatedAt = Date.now();
+    
+    if (window.electron?.db) {
+      try {
+        await window.electron.db.updateConversation(id, newTitle, updatedAt);
+      } catch (error) {
+        console.error('Failed to rename conversation in DB:', error);
+      }
+    }
+    
+    setConversations(prev => prev.map(conv => 
+      conv.id === id 
+        ? { ...conv, title: newTitle, updatedAt }
+        : conv
+    ));
+  }, []);
+
   return {
     conversations,
     currentConversation: getCurrentConversation(),
@@ -217,6 +235,7 @@ export const useChat = () => {
     sendMessage,
     createNewConversation,
     deleteConversation,
-    selectConversation
+    selectConversation,
+    renameConversation
   };
 };
