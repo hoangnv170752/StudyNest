@@ -62,10 +62,12 @@ export class DatabaseManager {
         console.log('Loaded existing database');
       } else {
         this.db = new this.SQL.Database();
-        this.initializeDatabase();
-        this.saveDatabase();
         console.log('Created new database');
       }
+      
+      // Always ensure tables exist
+      this.initializeDatabase();
+      this.saveDatabase();
     } catch (error) {
       console.error('Database initialization error:', error);
       throw error;
@@ -80,26 +82,36 @@ export class DatabaseManager {
 
   private initializeDatabase(): void {
     if (!this.db) return;
-    this.db.run(`
-      CREATE TABLE IF NOT EXISTS conversations (
-        id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
-        createdAt INTEGER NOT NULL,
-        updatedAt INTEGER NOT NULL
-      )
-    `);
-    this.db.run(`
-      CREATE TABLE IF NOT EXISTS messages (
-        id TEXT PRIMARY KEY,
-        conversationId TEXT NOT NULL,
-        role TEXT NOT NULL CHECK(role IN ('user', 'assistant', 'system')),
-        content TEXT NOT NULL,
-        timestamp INTEGER NOT NULL,
-        FOREIGN KEY (conversationId) REFERENCES conversations(id) ON DELETE CASCADE
-      )
-    `);
-    this.db.run(`CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversationId)`);
-    this.db.run(`CREATE INDEX IF NOT EXISTS idx_conversations_updated ON conversations(updatedAt DESC)`);
+    
+    try {
+      this.db.run(`
+        CREATE TABLE IF NOT EXISTS conversations (
+          id TEXT PRIMARY KEY,
+          title TEXT NOT NULL,
+          createdAt INTEGER NOT NULL,
+          updatedAt INTEGER NOT NULL
+        )
+      `);
+      
+      this.db.run(`
+        CREATE TABLE IF NOT EXISTS messages (
+          id TEXT PRIMARY KEY,
+          conversationId TEXT NOT NULL,
+          role TEXT NOT NULL CHECK(role IN ('user', 'assistant', 'system')),
+          content TEXT NOT NULL,
+          timestamp INTEGER NOT NULL,
+          FOREIGN KEY (conversationId) REFERENCES conversations(id) ON DELETE CASCADE
+        )
+      `);
+      
+      this.db.run(`CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversationId)`);
+      
+      this.db.run(`CREATE INDEX IF NOT EXISTS idx_conversations_updated ON conversations(updatedAt DESC)`);
+      
+      console.log('Database tables initialized');
+    } catch (error) {
+      console.error('Error initializing database tables:', error);
+    }
   }
 
   getAllConversations(): DBConversation[] {

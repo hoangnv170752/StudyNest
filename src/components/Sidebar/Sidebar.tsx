@@ -61,7 +61,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       <div className="sidebar-footer">
-        <ThemeToggle theme={theme} onToggle={onThemeToggle} />
+        <div className="theme-toggle-container">
+          <span className="theme-label">Theme</span>
+          <ThemeToggle theme={theme} onToggle={onThemeToggle} />
+        </div>
         <div className="model-info">
           <button 
             className="info-link"

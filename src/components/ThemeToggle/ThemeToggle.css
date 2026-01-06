@@ -1,64 +1,95 @@
 @import '../../styles/tokens.css';
 
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+.theme-toggle-wrapper {
   cursor: pointer;
-  transition: all var(--transition-base);
-  width: 100%;
+  display: inline-block;
 }
 
-.theme-toggle:hover {
-  background: var(--color-surface-hover);
-  border-color: var(--color-border-hover);
-}
-
-.toggle-track {
-  position: relative;
-  width: 48px;
-  height: 24px;
-  border-radius: var(--radius-full);
-  transition: background-color var(--transition-base);
-}
-
-.toggle-track.light {
-  background: var(--color-black-20);
-}
-
-.toggle-track.dark {
-  background: var(--color-primary);
-}
-
-.toggle-thumb {
+.toggle-checkbox {
   position: absolute;
-  top: 2px;
-  width: 20px;
-  height: 20px;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.toggle-slot {
+  position: relative;
+  height: 2em;
+  width: 4em;
+  border: 2px solid var(--color-border);
+  border-radius: 10em;
+  background-color: var(--color-surface);
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 250ms, border-color 250ms;
+}
+
+.toggle-checkbox:checked ~ .toggle-slot {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+[data-theme="dark"] .toggle-slot {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-button {
+  transform: translate(2.3em, 0.35em);
+  position: absolute;
+  height: 1.3em;
+  width: 1.3em;
   border-radius: 50%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  transition: transform var(--transition-base);
-  box-shadow: var(--shadow-sm);
+  background-color: #ffeccf;
+  box-shadow: inset 0px 0px 0px 0.15em #ffbb52;
+  transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
 }
 
-.toggle-track.light .toggle-thumb {
-  transform: translateX(2px);
+.toggle-checkbox:checked ~ .toggle-slot .toggle-button {
+  background-color: #485367;
+  box-shadow: inset 0px 0px 0px 0.15em white;
+  transform: translate(0.35em, 0.35em);
 }
 
-.toggle-track.dark .toggle-thumb {
-  transform: translateX(26px);
+.sun-icon {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  color: #ffbb52;
 }
 
-.toggle-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+.sun-icon-wrapper {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  opacity: 1;
+  transform: translate(0.4em, 0.4em) rotate(15deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .sun-icon-wrapper {
+  opacity: 0;
+  transform: translate(0.6em, 0.4em) rotate(0deg);
+}
+
+.moon-icon {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  color: white;
+}
+
+.moon-icon-wrapper {
+  position: absolute;
+  height: 1.2em;
+  width: 1.2em;
+  opacity: 0;
+  transform: translate(2.2em, 0.4em) rotate(0deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .moon-icon-wrapper {
+  opacity: 1;
+  transform: translate(2.4em, 0.4em) rotate(-15deg);
 }

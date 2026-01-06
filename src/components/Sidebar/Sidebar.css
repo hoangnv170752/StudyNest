@@ -100,7 +100,20 @@
   border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 0.75rem;
+}
+
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  user-select: none;
 }
 
 .model-info {

@@ -64,7 +64,7 @@ export const useChat = () => {
     return newConv.id;
   }, []);
 
-  const sendMessage = useCallback(async (content: string) => {
+  const sendMessage = useCallback(async (content: string, model: string = 'llama3.2') => {
     let conversationId = currentConversationId;
     
     if (!conversationId) {
@@ -116,7 +116,7 @@ export const useChat = () => {
 
     try {
       const llmClient = createLLMClient({
-        name: 'tinyllama:1.1b',
+        name: model,
         endpoint: 'http://localhost:11434/api/generate',
         temperature: 0.7,
         maxTokens: 2048

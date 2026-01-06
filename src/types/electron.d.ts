@@ -36,16 +36,18 @@ export interface ElectronAPI {
   };
   ollama: {
     generate: (payload: any) => Promise<any>;
+    listModels: () => Promise<string[]>;
+    pullModel: (modelName: string) => Promise<boolean>;
   };
   db: {
-    getAllConversations: () => Promise<DBConversation[]>;
-    getConversation: (id: string) => Promise<DBConversation | undefined>;
-    createConversation: (conversation: DBConversation) => Promise<boolean>;
+    getAllConversations: () => Promise<any[]>;
+    getConversation: (id: string) => Promise<any>;
+    createConversation: (conversation: any) => Promise<boolean>;
     updateConversation: (id: string, title: string, updatedAt: number) => Promise<boolean>;
     deleteConversation: (id: string) => Promise<boolean>;
-    getMessages: (conversationId: string) => Promise<DBMessage[]>;
-    createMessage: (message: DBMessage) => Promise<boolean>;
-    getConversationWithMessages: (id: string) => Promise<{ conversation: DBConversation; messages: DBMessage[] } | null>;
+    getMessages: (conversationId: string) => Promise<any[]>;
+    createMessage: (message: any) => Promise<boolean>;
+    getConversationWithMessages: (id: string) => Promise<any>;
   };
 }
 

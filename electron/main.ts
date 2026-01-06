@@ -146,6 +146,84 @@ function setupIpcHandlers() {
   ipcMain.handle('db:getConversationWithMessages', async (_event, id: string) => {
     return dbManager.getConversationWithMessages(id);
   });
+
+  ipcMain.handle('ollama:listModels', async () => {
+    return new Promise((resolve, reject) => {
+      const options = {
+        hostname: '127.0.0.1',
+        port: 11434,
+        path: '/api/tags',
+        method: 'GET',
+      };
+
+      console.log('Fetching models from Ollama...');
+
+      const req = http.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          try {
+            console.log('Ollama response:', data);
+            const jsonData = JSON.parse(data);
+            console.log('Parsed JSON:', jsonData);
+            const modelNames = jsonData.models?.map((m: any) => m.name) || [];
+            console.log('Model names:', modelNames);
+            resolve(modelNames);
+          } catch (error) {
+            console.error('Error parsing Ollama response:', error);
+            resolve([]);
+          }
+        });
+      });
+
+      req.on('error', (error) => {
+        console.error('Error connecting to Ollama:', error);
+        resolve([]);
+      });
+
+      req.end();
+    });
+  });
+
+  ipcMain.handle('ollama:pullModel', async (_event, modelName: string) => {
+    return new Promise((resolve, reject) => {
+      const postData = JSON.stringify({ name: modelName });
+      
+      const options = {
+        hostname: '127.0.0.1',
+        port: 11434,
+        path: '/api/pull',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+
+      const req = http.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          resolve(true);
+        });
+      });
+
+      req.on('error', (error) => {
+        reject(error);
+      });
+
+      req.write(postData);
+      req.end();
+    });
+  });
 }
 
 app.whenReady().then(async () => {

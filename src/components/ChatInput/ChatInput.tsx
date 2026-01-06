@@ -7,16 +7,21 @@ import {
   mdiCodeBraces, 
   mdiFileDocument,
   mdiMicrophone,
-  mdiStop
+  mdiStop,
+  mdiChevronDown,
+  mdiDownload,
+  mdiCheckCircle
 } from '@mdi/js';
 import './ChatInput.css';
 
 interface ChatInputProps {
-  onSend: (message: string) => void;
+  onSend: (message: string, model?: string) => void;
   disabled?: boolean;
   placeholder?: string;
   isGenerating?: boolean;
   onStopGeneration?: () => void;
+  selectedModel?: string;
+  onModelChange?: (model: string) => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ 
@@ -24,10 +29,16 @@ const ChatInput: React.FC<ChatInputProps> = ({
   disabled = false,
   placeholder = "Ask anything",
   isGenerating = false,
-  onStopGeneration
+  onStopGeneration,
+  selectedModel = 'llama3.2',
+  onModelChange
 }) => {
   const [input, setInput] = useState('');
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
+  const [availableModels, setAvailableModels] = useState<Array<{ id: string; name: string }>>([]);
+  const [downloadingModels, setDownloadingModels] = useState<Set<string>>(new Set());
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -36,13 +47,111 @@ const ChatInput: React.FC<ChatInputProps> = ({
     }
   }, [input]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowModelDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const fetchModels = async () => {
+      console.log('ChatInput: Checking for ollama API...', window.electron?.ollama);
+      if (window.electron?.ollama) {
+        try {
+          console.log('ChatInput: Fetching models...');
+          const models = await window.electron.ollama.listModels();
+          console.log('ChatInput: Received models:', models);
+          
+          // Convert model names to display format
+          const formattedModels = models.map((modelName: string) => ({
+            id: modelName,
+            name: formatModelName(modelName)
+          }));
+          
+          console.log('ChatInput: Formatted models:', formattedModels);
+          setAvailableModels(formattedModels);
+        } catch (error) {
+          console.error('Failed to fetch models:', error);
+        }
+      } else {
+        console.log('ChatInput: window.electron.ollama not available');
+      }
+    };
+
+    fetchModels();
+    const interval = setInterval(fetchModels, 10000);
+    return () => clearInterval(interval);
+  }, []);
+  
+  // Helper function to format model names for display
+  const formatModelName = (modelName: string): string => {
+    // Remove :latest suffix if present
+    const cleanName = modelName.replace(':latest', '');
+    
+    // Capitalize first letter and format common names
+    const parts = cleanName.split(':');
+    const baseName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    
+    if (parts.length > 1) {
+      return `${baseName} ${parts[1].toUpperCase()}`;
+    }
+    
+    return baseName;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !disabled) {
-      onSend(input.trim());
+      onSend(input.trim(), selectedModel);
       setInput('');
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
+      }
+    }
+  };
+
+  const handleModelSelect = (modelId: string) => {
+    if (onModelChange) {
+      onModelChange(modelId);
+    }
+    setShowModelDropdown(false);
+  };
+
+  const getModelName = (modelId: string) => {
+    return availableModels.find(m => m.id === modelId)?.name || formatModelName(modelId);
+  };
+
+  const isModelAvailable = (modelId: string) => {
+    // Model is available if it exists in the list (since we only show installed models)
+    return true;
+  };
+
+  const handleDownloadModel = async (modelId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (window.electron?.ollama) {
+      setDownloadingModels(prev => new Set(prev).add(modelId));
+      try {
+        await window.electron.ollama.pullModel(modelId);
+        // Refresh model list
+        const models = await window.electron.ollama.listModels();
+        const formattedModels = models.map((modelName: string) => ({
+          id: modelName,
+          name: formatModelName(modelName)
+        }));
+        setAvailableModels(formattedModels);
+      } catch (error) {
+        console.error('Failed to download model:', error);
+      } finally {
+        setDownloadingModels(prev => {
+          const next = new Set(prev);
+          next.delete(modelId);
+          return next;
+        });
       }
     }
   };
@@ -58,6 +167,47 @@ const ChatInput: React.FC<ChatInputProps> = ({
     <div className="chat-input-container">
       <form onSubmit={handleSubmit} className="chat-input-form">
         <div className="input-wrapper">
+          <div className="model-selector-container" ref={dropdownRef}>
+            <button
+              type="button"
+              className="model-selector-button"
+              onClick={() => setShowModelDropdown(!showModelDropdown)}
+              title="Select model"
+            >
+              <span className="model-name">{getModelName(selectedModel)}</span>
+              <Icon path={mdiChevronDown} size={0.7} />
+            </button>
+            {showModelDropdown && (
+              <div className="model-dropdown">
+                {availableModels.length > 0 ? (
+                  availableModels.map((model) => {
+                    const downloading = downloadingModels.has(model.id);
+                    return (
+                      <div
+                        key={model.id}
+                        className={`model-option-wrapper ${selectedModel === model.id ? 'active' : ''}`}
+                      >
+                        <button
+                          type="button"
+                          className="model-option"
+                          onClick={() => handleModelSelect(model.id)}
+                        >
+                          <span className="model-option-name">{model.name}</span>
+                          <Icon path={mdiCheckCircle} size={0.7} className="model-available-icon" />
+                        </button>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="model-option-wrapper">
+                    <div className="model-option" style={{ opacity: 0.6, cursor: 'default' }}>
+                      <span className="model-option-name">No models installed</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           {/* <div className="input-actions-left">
             <button 
               type="button" 

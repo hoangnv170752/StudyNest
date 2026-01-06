@@ -21,6 +21,7 @@
   border: 1px solid var(--color-border);
   transition: all 0.2s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 [data-theme="dark"] .input-wrapper {
@@ -163,8 +164,156 @@
 .input-footer {
   text-align: center;
   font-size: 0.75rem;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
   margin-top: 0.75rem;
+  padding: 0 1rem;
+}
+
+.model-selector-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.model-selector-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.model-selector-button:hover {
+  background: var(--color-white-10);
+  border-color: var(--color-primary);
+}
+
+.model-selector-button .model-name {
+  font-weight: 500;
+}
+
+.model-dropdown {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: dropdownSlideUp 0.2s ease-out;
+}
+
+@keyframes dropdownSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.model-option-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  transition: background 0.15s;
+}
+
+.model-option-wrapper:hover {
+  background: var(--color-white-10);
+}
+
+.model-option-wrapper.active {
+  background: var(--color-primary-alpha);
+}
+
+.model-option-wrapper:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.model-option-wrapper:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.model-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.model-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.model-option-wrapper.active .model-option {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.model-option-name {
+  flex: 1;
+}
+
+.model-available-icon {
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.model-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.model-download-btn:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  transform: scale(1.05);
+}
+
+.model-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.downloading-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .model-dropdown {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Scrollbar for textarea */

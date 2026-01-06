@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import ChatInput from '../../components/ChatInput/ChatInput';
@@ -20,6 +20,7 @@ const Chat: React.FC = () => {
   } = useChat();
 
   const { theme, toggleTheme } = useTheme();
+  const [selectedModel, setSelectedModel] = useState('llama3.2');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -31,18 +32,18 @@ const Chat: React.FC = () => {
     scrollToBottom();
   }, [currentConversation?.messages]);
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = (content: string, model?: string) => {
     if (!currentConversationId) {
       createNewConversation();
     }
-    sendMessage(content);
+    sendMessage(content, model || selectedModel);
   };
 
   const handlePromptSelect = (prompt: string) => {
     if (!currentConversationId) {
       createNewConversation();
     }
-    sendMessage(prompt);
+    sendMessage(prompt, selectedModel);
   };
 
   return (
@@ -84,6 +85,8 @@ const Chat: React.FC = () => {
           onSend={handleSendMessage} 
           disabled={isLoading}
           isGenerating={isLoading}
+          selectedModel={selectedModel}
+          onModelChange={setSelectedModel}
         />
       </div>
     </div>

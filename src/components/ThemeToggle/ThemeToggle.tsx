@@ -1,4 +1,6 @@
 import React from 'react';
+import Icon from '@mdi/react';
+import { mdiWhiteBalanceSunny, mdiMoonWaningCrescent } from '@mdi/js';
 import './ThemeToggle.css';
 
 interface ThemeToggleProps {
@@ -8,20 +10,24 @@ interface ThemeToggleProps {
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle }) => {
   return (
-    <button 
-      className="theme-toggle" 
-      onClick={onToggle}
-      aria-label="Toggle theme"
-    >
-      <div className={`toggle-track ${theme === 'dark' ? 'dark' : 'light'}`}>
-        <div className="toggle-thumb">
-          {theme === 'light' ? '☀️' : '🌙'}
+    <label className="theme-toggle-wrapper">
+      <input 
+        className="toggle-checkbox" 
+        type="checkbox" 
+        checked={theme === 'dark'}
+        onChange={onToggle}
+        aria-label="Toggle theme"
+      />
+      <div className="toggle-slot">
+        <div className="sun-icon-wrapper">
+          <Icon path={mdiWhiteBalanceSunny} className="sun-icon" />
+        </div>
+        <div className="toggle-button"></div>
+        <div className="moon-icon-wrapper">
+          <Icon path={mdiMoonWaningCrescent} className="moon-icon" />
         </div>
       </div>
-      <span className="toggle-label">
-        {theme === 'light' ? 'Light' : 'Dark'}
-      </span>
-    </button>
+    </label>
   );
 };
 
