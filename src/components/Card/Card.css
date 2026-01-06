@@ -1,0 +1,54 @@
+@import '../../styles/tokens.css';
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+/* Variants */
+.card-default {
+  background: var(--color-surface);
+}
+
+.card-outlined {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.card-elevated {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+/* Padding */
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-sm {
+  padding: var(--spacing-md);
+}
+
+.card-padding-md {
+  padding: var(--spacing-lg);
+}
+
+.card-padding-lg {
+  padding: var(--spacing-xl);
+}
+
+/* Hoverable */
+.card-hoverable:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Clickable */
+.card-clickable {
+  cursor: pointer;
+}
+
+.card-clickable:active {
+  transform: translateY(0);
+}

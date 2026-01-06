@@ -1,0 +1,15 @@
+.home {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.home-main {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .home {
+    padding: 1rem;
+  }
+}

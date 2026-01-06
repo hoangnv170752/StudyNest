@@ -1,0 +1,124 @@
+@import '../../styles/tokens.css';
+
+.typography {
+  margin: 0;
+  font-family: var(--font-family-base);
+}
+
+/* Variants */
+.typography-h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.typography-h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.typography-h3 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.typography-h4 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.typography-h5 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.typography-h6 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+}
+
+.typography-body1 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+.typography-body2 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+.typography-caption {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+.typography-overline {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Colors */
+.typography-color-primary {
+  color: var(--color-text-primary);
+}
+
+.typography-color-secondary {
+  color: var(--color-text-secondary);
+}
+
+.typography-color-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+.typography-color-inverse {
+  color: var(--color-text-inverse);
+}
+
+.typography-color-error {
+  color: #ef4444;
+}
+
+.typography-color-success {
+  color: #10b981;
+}
+
+/* Alignment */
+.typography-align-left {
+  text-align: left;
+}
+
+.typography-align-center {
+  text-align: center;
+}
+
+.typography-align-right {
+  text-align: right;
+}
+
+/* Weight */
+.typography-weight-normal {
+  font-weight: var(--font-weight-normal);
+}
+
+.typography-weight-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.typography-weight-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.typography-weight-bold {
+  font-weight: var(--font-weight-bold);
+}

@@ -1,19 +1,23 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    "module": "esnext",
-    "target": "esnext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "downlevelIteration": true,
-    "skipLibCheck": true,
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "node",
     "jsx": "react-jsx",
-    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "types": [
-      "bun-types", // add Bun global
-      "@types/web"
-    ]
-  }
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*", "src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "electron/**/*"]
 }

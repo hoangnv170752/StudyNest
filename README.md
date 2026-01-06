@@ -1,25 +1,85 @@
-# React Bun App
+# StudyNest
 
-This is a single-page application project template using React and [Bun](https://bun.sh/). Run the following commands to get started.
+A modern study management application built with Electron, React, and TypeScript.
 
-```sh
-bun create react ./react-bun-app
-cd react-bun-app
+## Features
+
+- Task management with due dates
+- Clean and modern UI
+- Cross-platform desktop application
+- Built with Electron for native desktop experience
+
+## Development
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
 ```
 
-The `bun create` command will automatically install the required dependencies. To start the dev server:
+### Running in Development Mode
 
-```sh
-bun run dev
+```bash
+npm run dev
 ```
 
-Then open http://localhost:3000 with your browser to see the result.
+This will start both the React development server and Electron app.
 
-This bundles `src/index.tsx` and starts a development server that serves from the `public` and `build` directories. When the incoming request to `localhost:3000/` comes in, the following exchange occurs:
+### Building for Production
 
-- The Bun server returns `public/index.html`.
-- The browser renders this HTML, which contains a `script` tags with `src="/index.js"`. The browser requests this file.
-- The server checks for this file, first in `public` (no match) then in `build`. It finds `build/index.js` and returns it to the browser.
-- This file renders the React component in `src/App.tsx` inside the `div#root` element. The app is now ready to accept user input.
+```bash
+npm run build
+```
 
-Start building your app by editing `src/App.tsx`.
+### Packaging
+
+Build distributable packages for your platform:
+
+```bash
+# For macOS
+npm run package:mac
+
+# For Windows
+npm run package:win
+
+# For Linux
+npm run package:linux
+
+# For all platforms
+npm run package
+```
+
+## Project Structure
+
+```
+studynest/
+├── electron/          # Electron main process files
+│   ├── main.ts       # Main process entry point
+│   └── preload.ts    # Preload script
+├── src/              # React application source
+│   ├── App.tsx       # Main React component
+│   ├── App.css       # App styles
+│   ├── index.tsx     # React entry point
+│   └── index.css     # Global styles
+├── public/           # Static assets
+│   └── index.html    # HTML template
+├── dist/             # Build output
+└── release/          # Packaged applications
+```
+
+## Technologies
+
+- **Electron**: Desktop application framework
+- **React**: UI library
+- **TypeScript**: Type-safe JavaScript
+- **Webpack**: Module bundler
+- **electron-builder**: Application packager
+
+## License
+
+MIT

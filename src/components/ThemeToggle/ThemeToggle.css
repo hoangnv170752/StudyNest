@@ -1,0 +1,64 @@
+@import '../../styles/tokens.css';
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  width: 100%;
+}
+
+.theme-toggle:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+}
+
+.toggle-track {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-base);
+}
+
+.toggle-track.light {
+  background: var(--color-black-20);
+}
+
+.toggle-track.dark {
+  background: var(--color-primary);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: transform var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.toggle-track.light .toggle-thumb {
+  transform: translateX(2px);
+}
+
+.toggle-track.dark .toggle-thumb {
+  transform: translateX(26px);
+}
+
+.toggle-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
