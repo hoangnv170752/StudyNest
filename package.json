@@ -26,10 +26,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "@types/sql.js": "^1.4.9",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "concurrently": "^8.2.2",
@@ -48,17 +48,21 @@
   "dependencies": {
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
-    "better-sqlite3": "^12.5.0",
     "fireworks-js": "^2.10.8",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sql.js": "^1.12.0"
   },
   "build": {
     "appId": "com.studynest.app",
     "productName": "StudyNest",
     "files": [
       "dist/**/*",
-      "public/**/*"
+      "public/**/*",
+      "node_modules/sql.js/dist/*.wasm"
+    ],
+    "asarUnpack": [
+      "node_modules/sql.js/dist/*.wasm"
     ],
     "directories": {
       "output": "release"
@@ -81,7 +85,9 @@
         "AppImage",
         "deb"
       ]
-    }
+    },
+    "nodeGypRebuild": false,
+    "npmRebuild": false
   },
   "packageManager": "pnpm@10.21.0+sha512.da3337267e400fdd3d479a6c68079ac6db01d8ca4f67572083e722775a796788a7a9956613749e000fac20d424b594f7a791a5f4e2e13581c5ef947f26968a40"
 }

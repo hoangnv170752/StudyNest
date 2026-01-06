@@ -8,6 +8,10 @@ let mainWindow: BrowserWindow | null = null;
 const modelManager = new ModelManager();
 const dbManager = new DatabaseManager();
 
+async function initializeApp() {
+  await dbManager.initialize();
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
@@ -29,7 +33,8 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
+    // In production, load from dist folder (same level as main.js)
+    mainWindow.loadFile(path.join(__dirname, 'index.html'));
   }
 
   mainWindow.once('ready-to-show', () => {
@@ -143,15 +148,21 @@ function setupIpcHandlers() {
   });
 }
 
-app.whenReady().then(() => {
-  setupIpcHandlers();
-  createWindow();
+app.whenReady().then(async () => {
+  try {
+    await initializeApp();
+    setupIpcHandlers();
+    createWindow();
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+      }
+    });
+  } catch (error) {
+    console.error('App initialization failed:', error);
+    app.quit();
+  }
 });
 
 app.on('window-all-closed', () => {
