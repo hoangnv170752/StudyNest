@@ -30,7 +30,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   placeholder = "Ask anything",
   isGenerating = false,
   onStopGeneration,
-  selectedModel = 'llama3.2',
+  selectedModel = '',
   onModelChange
 }) => {
   const [input, setInput] = useState('');
@@ -75,6 +75,11 @@ const ChatInput: React.FC<ChatInputProps> = ({
           
           console.log('ChatInput: Formatted models:', formattedModels);
           setAvailableModels(formattedModels);
+          
+          // Set first available model as default if not already selected
+          if (formattedModels.length > 0 && onModelChange && !selectedModel) {
+            onModelChange(formattedModels[0].id);
+          }
         } catch (error) {
           console.error('Failed to fetch models:', error);
         }
@@ -86,14 +91,11 @@ const ChatInput: React.FC<ChatInputProps> = ({
     fetchModels();
     const interval = setInterval(fetchModels, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [onModelChange, selectedModel]);
   
-  // Helper function to format model names for display
   const formatModelName = (modelName: string): string => {
-    // Remove :latest suffix if present
     const cleanName = modelName.replace(':latest', '');
     
-    // Capitalize first letter and format common names
     const parts = cleanName.split(':');
     const baseName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
     

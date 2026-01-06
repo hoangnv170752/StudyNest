@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Fireworks } from 'fireworks-js';
 import './DonationModal.css';
+import qrCodeImage from '../../assets/buy-me-qr-code.png';
 
 interface DonationModalProps {
   isOpen: boolean;
@@ -133,7 +134,7 @@ export const DonationModal: React.FC<DonationModalProps> = ({ isOpen, onClose })
           
           <div className="qr-code-container">
             <img 
-              src="/buy-me-qr-code.png"
+              src={qrCodeImage}
               alt="Donation QR Code" 
               className="qr-code-image"
             />

@@ -10,6 +10,8 @@ const suggestions = [
   { icon: '💻', label: 'Code', prompt: 'Write code to...' },
   { icon: '📝', label: 'Summarize', prompt: 'Summarize this text...' },
   { icon: '🎯', label: 'Get advice', prompt: 'Give me advice on...' },
+  { icon: '🎯', label: 'Focus on', prompt: 'Give me advice on...' },
+  { icon: '📝', label: 'Write me', prompt: 'Write a poem on...' },
 ];
 
 const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ onSelectPrompt }) => {

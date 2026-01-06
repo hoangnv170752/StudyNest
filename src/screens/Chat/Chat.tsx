@@ -20,7 +20,7 @@ const Chat: React.FC = () => {
   } = useChat();
 
   const { theme, toggleTheme } = useTheme();
-  const [selectedModel, setSelectedModel] = useState('llama3.2');
+  const [selectedModel, setSelectedModel] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -40,10 +40,13 @@ const Chat: React.FC = () => {
   };
 
   const handlePromptSelect = (prompt: string) => {
-    if (!currentConversationId) {
-      createNewConversation();
+    // Just populate the input, don't send immediately
+    const chatInput = document.querySelector('.chat-textarea') as HTMLTextAreaElement;
+    if (chatInput) {
+      chatInput.value = prompt;
+      chatInput.dispatchEvent(new Event('input', { bubbles: true }));
+      chatInput.focus();
     }
-    sendMessage(prompt, selectedModel);
   };
 
   return (

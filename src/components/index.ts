@@ -14,3 +14,4 @@ export { default as ThemeToggle } from './ThemeToggle/ThemeToggle';
 export { ModelDownload } from './ModelDownload';
 export { default as DonationModal } from './DonationModal/DonationModal';
 export { default as AuthorModal } from './AuthorModal/AuthorModal';
+export { default as HowToUseModal } from './HowToUseModal/HowToUseModal';

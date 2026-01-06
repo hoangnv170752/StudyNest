@@ -18,6 +18,8 @@ function createWindow() {
     height: 800,
     minWidth: 800,
     minHeight: 600,
+    title: 'StudyNest',
+    icon: path.join(__dirname, '../public/studynest.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

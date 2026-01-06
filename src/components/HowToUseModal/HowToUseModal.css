@@ -1,0 +1,249 @@
+@import '../../styles/tokens.css';
+
+.how-to-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.how-to-modal-content {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: 16px;
+  max-width: 700px;
+  max-height: 85vh;
+  width: 90%;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.how-to-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--color-white-10);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.how-to-modal-close:hover {
+  background: var(--color-white-20);
+  transform: scale(1.1);
+}
+
+.how-to-content {
+  padding: 2rem;
+}
+
+.how-to-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.os-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--color-white-10);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.os-selector label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.os-dropdown {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.os-dropdown:hover {
+  border-color: var(--color-primary);
+}
+
+.os-dropdown:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.os-dropdown option {
+  padding: 0.5rem;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.how-to-section {
+  margin-bottom: 2rem;
+}
+
+.how-to-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.how-to-section p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.how-to-section ul {
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.how-to-section li {
+  margin: 0.5rem 0;
+}
+
+.code-block {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+}
+
+.code-block code {
+  font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #d4d4d4;
+  line-height: 1.6;
+}
+
+.model-recommendations {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.model-card {
+  background: var(--color-white-10);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  transition: all 0.2s;
+}
+
+.model-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.model-card h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.model-card p {
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+  color: var(--color-text-secondary);
+}
+
+.model-card strong {
+  color: var(--color-text-primary);
+}
+
+.how-to-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.how-to-footer p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.how-to-footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.how-to-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Scrollbar styling */
+.how-to-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.how-to-modal-content::-webkit-scrollbar-track {
+  background: var(--color-white-10);
+  border-radius: 4px;
+}
+
+.how-to-modal-content::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 4px;
+}
+
+.how-to-modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .how-to-modal-content {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .model-card {
+  background: rgba(255, 255, 255, 0.05);
+}

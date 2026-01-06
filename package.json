@@ -49,8 +49,12 @@
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "fireworks-js": "^2.10.8",
+    "highlight.js": "^11.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
     "sql.js": "^1.12.0"
   },
   "build": {
@@ -69,18 +73,21 @@
     },
     "mac": {
       "category": "public.app-category.education",
+      "icon": "public/studynest.png",
       "target": [
         "dmg",
         "zip"
       ]
     },
     "win": {
+      "icon": "public/studynest.png",
       "target": [
         "nsis",
         "portable"
       ]
     },
     "linux": {
+      "icon": "public/studynest.png",
       "target": [
         "AppImage",
         "deb"

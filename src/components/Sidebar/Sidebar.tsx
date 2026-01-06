@@ -5,6 +5,7 @@ import { Conversation } from '../../types/chat';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import DonationModal from '../DonationModal/DonationModal';
 import AuthorModal from '../AuthorModal/AuthorModal';
+import HowToUseModal from '../HowToUseModal/HowToUseModal';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -28,6 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
   const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
+  const [isHowToUseModalOpen, setIsHowToUseModalOpen] = useState(false);
 
   return (
     <div className="sidebar">
@@ -72,7 +74,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           >
             Who is the author?
           </button>
-          <span className="model-label">Privacy guarantee</span>
+          <button 
+            className="info-link"
+            onClick={() => setIsHowToUseModalOpen(true)}
+          >
+            How to use
+          </button>
         </div>
         <button 
           className="donation-button"
@@ -91,6 +98,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       <AuthorModal 
         isOpen={isAuthorModalOpen}
         onClose={() => setIsAuthorModalOpen(false)}
+      />
+      <HowToUseModal 
+        isOpen={isHowToUseModalOpen}
+        onClose={() => setIsHowToUseModalOpen(false)}
       />
     </div>
   );
