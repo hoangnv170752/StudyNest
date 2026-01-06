@@ -11,3 +11,6 @@ export { default as Input } from './Input/Input';
 export { default as Card } from './Card/Card';
 export { default as Typography } from './Typography/Typography';
 export { default as ThemeToggle } from './ThemeToggle/ThemeToggle';
+export { ModelDownload } from './ModelDownload';
+export { default as DonationModal } from './DonationModal/DonationModal';
+export { default as AuthorModal } from './AuthorModal/AuthorModal';

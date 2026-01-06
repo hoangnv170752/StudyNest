@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from '@mdi/react';
-import { mdiPlus, mdiMessageText, mdiTrashCanOutline } from '@mdi/js';
+import { mdiPlus, mdiMessageText, mdiTrashCanOutline, mdiCoffee } from '@mdi/js';
 import { Conversation } from '../../types/chat';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import DonationModal from '../DonationModal/DonationModal';
+import AuthorModal from '../AuthorModal/AuthorModal';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -24,6 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   theme,
   onThemeToggle
 }) => {
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+  const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -58,10 +63,32 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="sidebar-footer">
         <ThemeToggle theme={theme} onToggle={onThemeToggle} />
         <div className="model-info">
-          <span className="model-label">Local LLM</span>
-          <span className="model-status">● Ready</span>
+          <button 
+            className="info-link"
+            onClick={() => setIsAuthorModalOpen(true)}
+          >
+            Who is the author?
+          </button>
+          <span className="model-label">Privacy guarantee</span>
         </div>
+        <button 
+          className="donation-button"
+          onClick={() => setIsDonationModalOpen(true)}
+          aria-label="Support with coffee"
+        >
+          <span className="donation-icon">☕</span>
+          <span className="donation-label">Support with Coffee</span>
+        </button>
       </div>
+
+      <DonationModal 
+        isOpen={isDonationModalOpen}
+        onClose={() => setIsDonationModalOpen(false)}
+      />
+      <AuthorModal 
+        isOpen={isAuthorModalOpen}
+        onClose={() => setIsAuthorModalOpen(false)}
+      />
     </div>
   );
 };

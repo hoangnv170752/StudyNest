@@ -15,7 +15,7 @@ const suggestions = [
 const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ onSelectPrompt }) => {
   return (
     <div className="prompt-suggestions">
-      <h1 className="welcome-title">What can I help with?</h1>
+      <h1 className="welcome-title">Hello Nester, how can I help you today?</h1>
       <div className="suggestions-grid">
         {suggestions.map((suggestion, index) => (
           <button

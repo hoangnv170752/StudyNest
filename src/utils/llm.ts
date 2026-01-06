@@ -9,25 +9,41 @@ export class LLMClient {
 
   async sendMessage(prompt: string, conversationHistory: string[] = []): Promise<string> {
     try {
-      const response = await fetch(this.config.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      if (window.electron?.ollama) {
+        const data = await window.electron.ollama.generate({
+          model: this.config.name,
           prompt,
-          temperature: this.config.temperature || 0.7,
-          max_tokens: this.config.maxTokens || 2048,
-          history: conversationHistory
-        })
-      });
+          stream: false,
+          options: {
+            temperature: this.config.temperature || 0.7,
+            num_predict: this.config.maxTokens || 2048
+          }
+        });
+        return data.response || '';
+      } else {
+        const response = await fetch(this.config.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: this.config.name,
+            prompt,
+            stream: false,
+            options: {
+              temperature: this.config.temperature || 0.7,
+              num_predict: this.config.maxTokens || 2048
+            }
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error(`LLM request failed: ${response.statusText}`);
+        if (!response.ok) {
+          throw new Error(`LLM request failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.response || '';
       }
-
-      const data = await response.json();
-      return data.response || data.text || data.content || '';
     } catch (error) {
       console.error('Error calling LLM:', error);
       throw error;
@@ -46,11 +62,13 @@ export class LLMClient {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          model: this.config.name,
           prompt,
-          temperature: this.config.temperature || 0.7,
-          max_tokens: this.config.maxTokens || 2048,
-          history: conversationHistory,
-          stream: true
+          stream: true,
+          options: {
+            temperature: this.config.temperature || 0.7,
+            num_predict: this.config.maxTokens || 2048
+          }
         })
       });
 
@@ -70,7 +88,18 @@ export class LLMClient {
         if (done) break;
 
         const chunk = decoder.decode(value);
-        onChunk(chunk);
+        const lines = chunk.split('\n').filter(line => line.trim());
+        
+        for (const line of lines) {
+          try {
+            const json = JSON.parse(line);
+            if (json.response) {
+              onChunk(json.response);
+            }
+          } catch (e) {
+            console.warn('Failed to parse chunk:', line);
+          }
+        }
       }
     } catch (error) {
       console.error('Error streaming from LLM:', error);
