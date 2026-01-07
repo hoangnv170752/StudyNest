@@ -48,6 +48,39 @@
 .message-content {
   flex: 1;
   min-width: 0;
+  position: relative;
+}
+
+.message-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.copy-button {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+.copy-button:hover {
+  opacity: 1;
+  background: var(--color-white-10);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.copy-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .message-text {

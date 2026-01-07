@@ -113,6 +113,48 @@ function setupIpcHandlers() {
     });
   });
 
+  ipcMain.handle('ollama:chat', async (_event, payload) => {
+    return new Promise((resolve, reject) => {
+      const postData = JSON.stringify(payload);
+      
+      const options = {
+        hostname: '127.0.0.1',
+        port: 11434,
+        path: '/api/chat',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+
+      const req = http.request(options, (res) => {
+        let data = '';
+
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+
+        res.on('end', () => {
+          try {
+            const jsonData = JSON.parse(data);
+            resolve(jsonData);
+          } catch (error) {
+            reject(new Error(`Failed to parse Ollama chat response: ${error}`));
+          }
+        });
+      });
+
+      req.on('error', (error) => {
+        console.error('Ollama chat API error:', error);
+        reject(error);
+      });
+
+      req.write(postData);
+      req.end();
+    });
+  });
+
   ipcMain.handle('db:getAllConversations', async () => {
     return dbManager.getAllConversations();
   });

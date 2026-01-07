@@ -22,6 +22,7 @@ const Chat: React.FC = () => {
 
   const { theme, toggleTheme } = useTheme();
   const [selectedModel, setSelectedModel] = useState('');
+  const [deepThinking, setDeepThinking] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -33,11 +34,11 @@ const Chat: React.FC = () => {
     scrollToBottom();
   }, [currentConversation?.messages]);
 
-  const handleSendMessage = (content: string, model?: string) => {
+  const handleSendMessage = (content: string, model?: string, isDeepThinking?: boolean) => {
     if (!currentConversationId) {
       createNewConversation();
     }
-    sendMessage(content, model || selectedModel);
+    sendMessage(content, model || selectedModel, isDeepThinking);
   };
 
   const handlePromptSelect = (prompt: string) => {
@@ -92,6 +93,8 @@ const Chat: React.FC = () => {
           isGenerating={isLoading}
           selectedModel={selectedModel}
           onModelChange={setSelectedModel}
+          deepThinking={deepThinking}
+          onDeepThinkingChange={setDeepThinking}
         />
       </div>
     </div>

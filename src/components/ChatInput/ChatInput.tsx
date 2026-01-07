@@ -12,16 +12,20 @@ import {
   mdiDownload,
   mdiCheckCircle
 } from '@mdi/js';
+import { Switch, FormControlLabel } from '@mui/material';
+import PsychologyIcon from '@mui/icons-material/Psychology';
 import './ChatInput.css';
 
 interface ChatInputProps {
-  onSend: (message: string, model?: string) => void;
+  onSend: (message: string, model?: string, deepThinking?: boolean) => void;
   disabled?: boolean;
   placeholder?: string;
   isGenerating?: boolean;
   onStopGeneration?: () => void;
   selectedModel?: string;
   onModelChange?: (model: string) => void;
+  deepThinking?: boolean;
+  onDeepThinkingChange?: (enabled: boolean) => void;
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({ 
@@ -31,7 +35,9 @@ const ChatInput: React.FC<ChatInputProps> = ({
   isGenerating = false,
   onStopGeneration,
   selectedModel = '',
-  onModelChange
+  onModelChange,
+  deepThinking = false,
+  onDeepThinkingChange
 }) => {
   const [input, setInput] = useState('');
   const [showModelDropdown, setShowModelDropdown] = useState(false);
@@ -109,7 +115,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !disabled) {
-      onSend(input.trim(), selectedModel);
+      onSend(input.trim(), selectedModel, deepThinking);
       setInput('');
       if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
@@ -169,16 +175,17 @@ const ChatInput: React.FC<ChatInputProps> = ({
     <div className="chat-input-container">
       <form onSubmit={handleSubmit} className="chat-input-form">
         <div className="input-wrapper">
-          <div className="model-selector-container" ref={dropdownRef}>
-            <button
-              type="button"
-              className="model-selector-button"
-              onClick={() => setShowModelDropdown(!showModelDropdown)}
-              title="Select model"
-            >
-              <span className="model-name">{getModelName(selectedModel)}</span>
-              <Icon path={mdiChevronDown} size={0.7} />
-            </button>
+          <div className="model-controls">
+            <div className="model-selector-container" ref={dropdownRef}>
+              <button
+                type="button"
+                className="model-selector-button"
+                onClick={() => setShowModelDropdown(!showModelDropdown)}
+                title="Select model"
+              >
+                <span className="model-name">{getModelName(selectedModel)}</span>
+                <Icon path={mdiChevronDown} size={0.7} />
+              </button>
             {showModelDropdown && (
               <div className="model-dropdown">
                 {availableModels.length > 0 ? (
@@ -209,6 +216,42 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 )}
               </div>
             )}
+            </div>
+            <div className="deep-thinking-toggle">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={deepThinking}
+                    onChange={(e) => onDeepThinkingChange?.(e.target.checked)}
+                    size="small"
+                    sx={{
+                      '& .MuiSwitch-switchBase.Mui-checked': {
+                        color: 'var(--color-primary)',
+                      },
+                      '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                        backgroundColor: 'var(--color-primary)',
+                      },
+                    }}
+                  />
+                }
+                label={
+                  <span className="deep-thinking-label">
+                    <PsychologyIcon sx={{ fontSize: 16 }} />
+                    {deepThinking ? 'Deep Thinking' : 'Normal'}
+                  </span>
+                }
+                sx={{
+                  margin: 0,
+                  '& .MuiFormControlLabel-label': {
+                    fontSize: '0.8rem',
+                    color: 'var(--color-text-secondary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  },
+                }}
+              />
+            </div>
           </div>
           {/* <div className="input-actions-left">
             <button 

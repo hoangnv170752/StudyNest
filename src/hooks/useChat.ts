@@ -64,7 +64,7 @@ export const useChat = () => {
     return newConv.id;
   }, []);
 
-  const sendMessage = useCallback(async (content: string, model: string = 'llama3.2') => {
+  const sendMessage = useCallback(async (content: string, model: string = 'llama3.2', deepThinking: boolean = false) => {
     let conversationId = currentConversationId;
     
     if (!conversationId) {
@@ -118,11 +118,14 @@ export const useChat = () => {
       const llmClient = createLLMClient({
         name: model,
         endpoint: 'http://localhost:11434/api/generate',
-        temperature: 0.7,
-        maxTokens: 2048
+        temperature: deepThinking ? 0.9 : 0.7,
+        maxTokens: deepThinking ? 4096 : 2048
       });
 
-      const response = await llmClient.sendMessage(content);
+      const currentConv = conversations.find(conv => conv.id === conversationId);
+      const conversationHistory = currentConv?.messages || [];
+
+      const response = await llmClient.sendMessage(content, conversationHistory);
       
       const assistantTimestamp = Date.now();
       const assistantMessage: Message = {

@@ -36,6 +36,7 @@ export interface ElectronAPI {
   };
   ollama: {
     generate: (payload: any) => Promise<any>;
+    chat: (payload: any) => Promise<any>;
     listModels: () => Promise<string[]>;
     pullModel: (modelName: string) => Promise<boolean>;
   };

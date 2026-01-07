@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiRobotOutline } from '@mdi/js';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -14,6 +16,17 @@ interface ChatMessageProps {
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.role === 'user';
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
 
   return (
     <div className={`chat-message ${isUser ? 'user-message' : 'assistant-message'}`}>
@@ -25,6 +38,17 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         />
       </div>
       <div className="message-content">
+        <div className="message-header">
+          {!isUser && (
+            <button 
+              className="copy-button" 
+              onClick={handleCopy}
+              title={copied ? 'Copied!' : 'Copy message'}
+            >
+              {copied ? <CheckIcon /> : <ContentCopyIcon />}
+            </button>
+          )}
+        </div>
         <div className="message-text">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}

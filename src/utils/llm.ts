@@ -1,4 +1,4 @@
-import { ModelConfig } from '../types/chat';
+import { ModelConfig, Message } from '../types/chat';
 
 export class LLMClient {
   private config: ModelConfig;
@@ -7,28 +7,39 @@ export class LLMClient {
     this.config = config;
   }
 
-  async sendMessage(prompt: string, conversationHistory: string[] = []): Promise<string> {
+  async sendMessage(prompt: string, conversationHistory: Message[] = []): Promise<string> {
     try {
+      const messages = [
+        ...conversationHistory.map(msg => ({
+          role: msg.role,
+          content: msg.content
+        })),
+        {
+          role: 'user' as const,
+          content: prompt
+        }
+      ];
+
       if (window.electron?.ollama) {
-        const data = await window.electron.ollama.generate({
+        const data = await window.electron.ollama.chat({
           model: this.config.name,
-          prompt,
+          messages,
           stream: false,
           options: {
             temperature: this.config.temperature || 0.7,
             num_predict: this.config.maxTokens || 2048
           }
         });
-        return data.response || '';
+        return data.message?.content || '';
       } else {
-        const response = await fetch(this.config.endpoint, {
+        const response = await fetch('http://localhost:11434/api/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             model: this.config.name,
-            prompt,
+            messages,
             stream: false,
             options: {
               temperature: this.config.temperature || 0.7,
@@ -42,7 +53,7 @@ export class LLMClient {
         }
 
         const data = await response.json();
-        return data.response || '';
+        return data.message?.content || '';
       }
     } catch (error) {
       console.error('Error calling LLM:', error);
@@ -53,17 +64,28 @@ export class LLMClient {
   async streamMessage(
     prompt: string,
     onChunk: (chunk: string) => void,
-    conversationHistory: string[] = []
+    conversationHistory: Message[] = []
   ): Promise<void> {
     try {
-      const response = await fetch(this.config.endpoint, {
+      const messages = [
+        ...conversationHistory.map(msg => ({
+          role: msg.role,
+          content: msg.content
+        })),
+        {
+          role: 'user' as const,
+          content: prompt
+        }
+      ];
+
+      const response = await fetch('http://localhost:11434/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: this.config.name,
-          prompt,
+          messages,
           stream: true,
           options: {
             temperature: this.config.temperature || 0.7,
@@ -93,8 +115,8 @@ export class LLMClient {
         for (const line of lines) {
           try {
             const json = JSON.parse(line);
-            if (json.response) {
-              onChunk(json.response);
+            if (json.message?.content) {
+              onChunk(json.message.content);
             }
           } catch (e) {
             console.warn('Failed to parse chunk:', line);

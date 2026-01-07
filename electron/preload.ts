@@ -21,6 +21,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
   ollama: {
     generate: (payload: any) => ipcRenderer.invoke('ollama:generate', payload),
+    chat: (payload: any) => ipcRenderer.invoke('ollama:chat', payload),
     listModels: () => ipcRenderer.invoke('ollama:listModels'),
     pullModel: (modelName: string) => ipcRenderer.invoke('ollama:pullModel', modelName)
   },

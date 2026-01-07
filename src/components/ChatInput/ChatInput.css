@@ -169,6 +169,13 @@
   padding: 0 1rem;
 }
 
+.model-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 .model-selector-container {
   position: relative;
   display: flex;
@@ -332,4 +339,22 @@
 
 [data-theme="dark"] .chat-textarea::-webkit-scrollbar-thumb {
   background: var(--color-white-20);
+}
+
+.deep-thinking-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.deep-thinking-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.deep-thinking-label svg {
+  color: var(--color-primary);
 }
