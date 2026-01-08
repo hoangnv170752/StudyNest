@@ -384,6 +384,10 @@ See `src/styles/README.md` for detailed documentation.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Acknowledgments
+
+- [Crane](https://github.com/lucasjinreal/Crane) - Original inspiration for local LLM inference integration using Rust and Candle
+
 ## License
 
 MIT
