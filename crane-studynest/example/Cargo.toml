@@ -1,0 +1,28 @@
+[package]
+name = "crane-examples"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crane = { path = "../crane" }
+anyhow = "1.0.97"
+
+[[bin]]
+name = "chat_simple"
+path = "src/chat_simple.rs"
+
+[[bin]]
+name = "chat_streaming"
+path = "src/chat_streaming.rs"
+
+[[bin]]
+name = "asr_simple"
+path = "src/asr_simple.rs"
+
+[[bin]]
+name = "vision_simple"
+path = "src/vision_simple.rs"
+
+[features]
+default = []
+onnx = ["crane/onnx"]

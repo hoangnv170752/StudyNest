@@ -25,6 +25,16 @@ contextBridge.exposeInMainWorld('electron', {
     listModels: () => ipcRenderer.invoke('ollama:listModels'),
     pullModel: (modelName: string) => ipcRenderer.invoke('ollama:pullModel', modelName)
   },
+  crane: {
+    start: () => ipcRenderer.invoke('crane:start'),
+    initialize: (modelPath: string) => ipcRenderer.invoke('crane:initialize', modelPath),
+    chat: (payload: any) => ipcRenderer.invoke('crane:chat', payload),
+    listModels: () => ipcRenderer.invoke('crane:listModels'),
+    isRunning: () => ipcRenderer.invoke('crane:isRunning'),
+    listAvailableModels: () => ipcRenderer.invoke('crane:listAvailableModels'),
+    getModelInfo: (modelId: string) => ipcRenderer.invoke('crane:getModelInfo', modelId),
+    modelExists: (modelName: string) => ipcRenderer.invoke('crane:modelExists', modelName)
+  },
   db: {
     getAllConversations: () => ipcRenderer.invoke('db:getAllConversations'),
     getConversation: (id: string) => ipcRenderer.invoke('db:getConversation', id),
