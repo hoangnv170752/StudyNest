@@ -3,10 +3,14 @@ import * as path from 'path';
 import * as http from 'http';
 import { ModelManager } from './modelManager';
 import { DatabaseManager } from './database';
+import { CraneService } from './craneService';
+import { CraneModelManager } from './craneModelManager';
 
 let mainWindow: BrowserWindow | null = null;
 const modelManager = new ModelManager();
 const dbManager = new DatabaseManager();
+const craneService = new CraneService();
+const craneModelManager = new CraneModelManager();
 
 async function initializeApp() {
   await dbManager.initialize();
@@ -268,6 +272,77 @@ function setupIpcHandlers() {
       req.end();
     });
   });
+
+  // Crane Service handlers
+  ipcMain.handle('crane:start', async () => {
+    try {
+      await craneService.start();
+      return { success: true };
+    } catch (error: any) {
+      console.error('Failed to start crane service:', error);
+      return { success: false, error: error.message };
+    }
+  });
+
+  ipcMain.handle('crane:initialize', async (_event, modelPath: string) => {
+    try {
+      await craneService.initialize(modelPath);
+      return { success: true };
+    } catch (error: any) {
+      console.error('Failed to initialize crane model:', error);
+      return { success: false, error: error.message };
+    }
+  });
+
+  ipcMain.handle('crane:chat', async (_event, payload) => {
+    try {
+      const response = await craneService.chat(payload);
+      return response;
+    } catch (error: any) {
+      console.error('Crane chat error:', error);
+      throw error;
+    }
+  });
+
+  ipcMain.handle('crane:listModels', async () => {
+    try {
+      return await craneService.listModels();
+    } catch (error: any) {
+      console.error('Failed to list crane models:', error);
+      return [];
+    }
+  });
+
+  ipcMain.handle('crane:isRunning', async () => {
+    return craneService.isRunning();
+  });
+
+  ipcMain.handle('crane:listAvailableModels', async () => {
+    try {
+      return await craneModelManager.listAvailableModels();
+    } catch (error: any) {
+      console.error('Failed to list crane models:', error);
+      return [];
+    }
+  });
+
+  ipcMain.handle('crane:getModelInfo', async (_event, modelId: string) => {
+    try {
+      return await craneModelManager.getModelInfo(modelId);
+    } catch (error: any) {
+      console.error('Failed to get crane model info:', error);
+      return null;
+    }
+  });
+
+  ipcMain.handle('crane:modelExists', async (_event, modelName: string) => {
+    try {
+      return await craneModelManager.modelExists(modelName);
+    } catch (error: any) {
+      console.error('Failed to check crane model existence:', error);
+      return false;
+    }
+  });
 }
 
 app.whenReady().then(async () => {
@@ -293,6 +368,7 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('before-quit', () => {
+app.on('before-quit', async () => {
   dbManager.close();
+  await craneService.stop();
 });

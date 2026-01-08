@@ -115,24 +115,93 @@ export const useChat = () => {
     setIsLoading(true);
 
     try {
-      const llmClient = createLLMClient({
-        name: model,
-        endpoint: 'http://localhost:11434/api/generate',
-        temperature: deepThinking ? 0.9 : 0.7,
-        maxTokens: deepThinking ? 4096 : 2048
-      });
-
+      let response: string;
       const currentConv = conversations.find(conv => conv.id === conversationId);
       const conversationHistory = currentConv?.messages || [];
 
-      const response = await llmClient.sendMessage(content, conversationHistory);
+      if (model.startsWith('crane:')) {
+        console.log('[useChat] Using Crane service for model:', model);
+        
+        // Extract model name from crane:ModelName format
+        const modelName = model.replace('crane:', '');
+        
+        // Get full model info to get the absolute path
+        const modelInfo = await window.electron.crane.getModelInfo(model);
+        if (!modelInfo) {
+          throw new Error(`Model not found: ${model}`);
+        }
+        
+        const modelPath = modelInfo.path;
+        console.log('[useChat] Model path:', modelPath);
+
+        // Ensure Crane service is running
+        if (window.electron?.crane) {
+          const isRunning = await window.electron.crane.isRunning();
+          
+          if (!isRunning) {
+            console.log('[useChat] Starting Crane service...');
+            const startResult = await window.electron.crane.start();
+            
+            if (!startResult.success) {
+              throw new Error(`Failed to start Crane service: ${startResult.error}`);
+            }
+          }
+
+          // Initialize model if needed
+          console.log('[useChat] Initializing Crane model with path:', modelPath);
+          const initResult = await window.electron.crane.initialize(modelPath);
+          
+          if (!initResult.success) {
+            throw new Error(`Failed to initialize model: ${initResult.error}`);
+          }
+
+          // Build messages array for Crane (include conversation history + current message)
+          const messages = [
+            ...conversationHistory.map(msg => ({
+              role: msg.role,
+              content: msg.content
+            })),
+            {
+              role: 'user',
+              content: content
+            }
+          ];
+
+          console.log('[useChat] Sending chat request to Crane with', messages.length, 'messages');
+          const craneResponse = await window.electron.crane.chat({
+            model: modelName,
+            messages,
+            temperature: deepThinking ? 0.9 : 0.7,
+            max_tokens: deepThinking ? 4096 : 2048
+          });
+
+          response = craneResponse.message?.content || '';
+          console.log('[useChat] Received response from Crane');
+        } else {
+          throw new Error('Crane service not available');
+        }
+      } else {
+        // Use Ollama for non-crane models
+        console.log('[useChat] Using Ollama for model:', model);
+        
+        const llmClient = createLLMClient({
+          name: model,
+          endpoint: 'http://localhost:11434/api/generate',
+          temperature: deepThinking ? 0.9 : 0.7,
+          maxTokens: deepThinking ? 4096 : 2048
+        });
+
+        response = await llmClient.sendMessage(content, conversationHistory);
+      }
       
       const assistantTimestamp = Date.now();
+      const inferenceTime = (assistantTimestamp - userMessage.timestamp) / 1000; // Convert to seconds
       const assistantMessage: Message = {
         id: `msg-${assistantTimestamp}-${Math.random().toString(36).substring(2, 9)}`,
         role: 'assistant',
         content: response,
-        timestamp: assistantTimestamp
+        timestamp: assistantTimestamp,
+        inferenceTime: inferenceTime
       };
 
       if (window.electron?.db) {

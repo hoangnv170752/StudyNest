@@ -114,6 +114,16 @@
   margin: 0.25em 0;
 }
 
+.message-text li > p {
+  margin: 0;
+  display: inline;
+}
+
+.message-text li > ul,
+.message-text li > ol {
+  margin-top: 0.25em;
+}
+
 .message-text h1,
 .message-text h2,
 .message-text h3,
@@ -199,4 +209,9 @@
   font-size: 0.75rem;
   color: var(--color-text-tertiary);
   margin-top: 0.25rem;
+}
+
+.inference-time {
+  color: var(--color-primary);
+  font-weight: 500;
 }

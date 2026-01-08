@@ -66,37 +66,59 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
   useEffect(() => {
     const fetchModels = async () => {
-      console.log('ChatInput: Checking for ollama API...', window.electron?.ollama);
+      const allModels: Array<{ id: string; name: string; type?: string; size?: string }> = [];
+
+      console.log('ChatInput: window.electron available:', !!window.electron);
+      console.log('ChatInput: window.electron.crane available:', !!window.electron?.crane);
+
+      // Fetch Crane models from checkpoints
+      if (window.electron?.crane) {
+        try {
+          console.log('ChatInput: Fetching crane models...');
+          const craneModels = await window.electron.crane.listAvailableModels();
+          console.log('ChatInput: Received crane models:', craneModels);
+          
+          allModels.push(...craneModels.map((model: any) => ({
+            id: model.id,
+            name: `${model.name} ${model.size ? `(${model.size})` : ''}`,
+            type: 'crane',
+            size: model.size
+          })));
+        } catch (error) {
+          console.error('Failed to fetch crane models:', error);
+        }
+      }
+
+      // Fetch Ollama models (always fetch, not exclusive)
       if (window.electron?.ollama) {
         try {
-          console.log('ChatInput: Fetching models...');
+          console.log('ChatInput: Fetching ollama models...');
           const models = await window.electron.ollama.listModels();
-          console.log('ChatInput: Received models:', models);
+          console.log('ChatInput: Received ollama models:', models);
           
           // Convert model names to display format
           const formattedModels = models.map((modelName: string) => ({
             id: modelName,
-            name: formatModelName(modelName)
+            name: formatModelName(modelName),
+            type: 'ollama'
           }));
           
-          console.log('ChatInput: Formatted models:', formattedModels);
-          setAvailableModels(formattedModels);
-          
-          // Set first available model as default if not already selected
-          if (formattedModels.length > 0 && onModelChange && !selectedModel) {
-            onModelChange(formattedModels[0].id);
-          }
+          allModels.push(...formattedModels);
         } catch (error) {
-          console.error('Failed to fetch models:', error);
+          console.error('Failed to fetch ollama models:', error);
         }
-      } else {
-        console.log('ChatInput: window.electron.ollama not available');
+      }
+
+      console.log('ChatInput: All available models:', allModels);
+      setAvailableModels(allModels);
+      
+      if (allModels.length > 0 && onModelChange && !selectedModel) {
+        onModelChange(allModels[0].id);
       }
     };
 
     fetchModels();
-    const interval = setInterval(fetchModels, 10000);
-    return () => clearInterval(interval);
+    // Only fetch once on mount, no polling
   }, [onModelChange, selectedModel]);
   
   const formatModelName = (modelName: string): string => {

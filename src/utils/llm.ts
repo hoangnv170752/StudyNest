@@ -1,5 +1,13 @@
 import { ModelConfig, Message } from '../types/chat';
 
+const cleanResponse = (text: string): string => {
+  return text
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/(\d+\.)\s*\n+\s*\*\*([^*]+)\*\*:/g, '$1 **$2**:')
+    .replace(/(\d+\.)\s*\n+\s*([^\n])/g, '$1 $2')
+    .trim();
+};
+
 export class LLMClient {
   private config: ModelConfig;
 
@@ -30,7 +38,7 @@ export class LLMClient {
             num_predict: this.config.maxTokens || 2048
           }
         });
-        return data.message?.content || '';
+        return cleanResponse(data.message?.content || '');
       } else {
         const response = await fetch('http://localhost:11434/api/chat', {
           method: 'POST',
@@ -53,7 +61,7 @@ export class LLMClient {
         }
 
         const data = await response.json();
-        return data.message?.content || '';
+        return cleanResponse(data.message?.content || '');
       }
     } catch (error) {
       console.error('Error calling LLM:', error);

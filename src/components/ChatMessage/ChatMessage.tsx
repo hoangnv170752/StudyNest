@@ -75,6 +75,9 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         </div>
         <div className="message-timestamp">
           {new Date(message.timestamp).toLocaleTimeString()}
+          {!isUser && message.inferenceTime !== undefined && (
+            <span className="inference-time"> • {message.inferenceTime.toFixed(2)}s</span>
+          )}
         </div>
       </div>
     </div>

@@ -40,6 +40,22 @@ export interface ElectronAPI {
     listModels: () => Promise<string[]>;
     pullModel: (modelName: string) => Promise<boolean>;
   };
+  crane: {
+    start: () => Promise<{ success: boolean; error?: string }>;
+    initialize: (modelPath: string) => Promise<{ success: boolean; error?: string }>;
+    chat: (payload: any) => Promise<any>;
+    listModels: () => Promise<string[]>;
+    isRunning: () => Promise<boolean>;
+    listAvailableModels: () => Promise<Array<{
+      id: string;
+      name: string;
+      path: string;
+      size?: string;
+      type: 'crane';
+    }>>;
+    getModelInfo: (modelId: string) => Promise<any>;
+    modelExists: (modelName: string) => Promise<boolean>;
+  };
   db: {
     getAllConversations: () => Promise<any[]>;
     getConversation: (id: string) => Promise<any>;
