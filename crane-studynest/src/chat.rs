@@ -213,7 +213,15 @@ impl ChatEngine {
             ChatModel::Qwen3(m) => m.generate(&input_ids, &gen_config, Some(&mut streamer)),
         }.map_err(|e| StudyNestError::ModelError(e.to_string()))?;
         
-        let response = self.tokenizer.decode(&output_ids, true)
+        // Only decode the new tokens (skip the input prompt)
+        let input_len = input_ids.len();
+        let new_tokens = if output_ids.len() > input_len {
+            &output_ids[input_len..]
+        } else {
+            &output_ids[..]
+        };
+        
+        let response = self.tokenizer.decode(new_tokens, true)
             .map_err(|e| StudyNestError::TokenizationError(e.to_string()))?;
         
         Ok(response)

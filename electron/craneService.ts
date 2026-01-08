@@ -114,18 +114,29 @@ export class CraneService {
 
     // Handle stderr (logs)
     this.process.stderr.on('data', (data) => {
-      console.log('[CraneService]', data.toString().trim());
+      const message = data.toString().trim();
+      console.error('[CraneService stderr]', message);
+      
+      // Check for critical errors
+      if (message.includes('error') || message.includes('Error') || message.includes('panic')) {
+        console.error('[CraneService] CRITICAL ERROR:', message);
+      }
+    });
+
+    // Handle process errors
+    this.process.on('error', (error) => {
+      console.error('[CraneService] Process error:', error);
     });
 
     // Handle process exit
-    this.process.on('exit', (code) => {
-      console.log(`[CraneService] Process exited with code ${code}`);
+    this.process.on('exit', (code, signal) => {
+      console.error(`[CraneService] Process exited with code ${code}, signal ${signal}`);
       this.process = null;
       this.isInitialized = false;
       
       // Reject all pending requests
       for (const [id, { reject }] of this.pendingRequests) {
-        reject(new Error('Service process terminated'));
+        reject(new Error(`Service process terminated (code: ${code}, signal: ${signal})`));
       }
       this.pendingRequests.clear();
     });

@@ -155,13 +155,19 @@ export const useChat = () => {
             throw new Error(`Failed to initialize model: ${initResult.error}`);
           }
 
-          // Build messages array for Crane
-          const messages = conversationHistory.map(msg => ({
-            role: msg.role,
-            content: msg.content
-          }));
+          // Build messages array for Crane (include conversation history + current message)
+          const messages = [
+            ...conversationHistory.map(msg => ({
+              role: msg.role,
+              content: msg.content
+            })),
+            {
+              role: 'user',
+              content: content
+            }
+          ];
 
-          console.log('[useChat] Sending chat request to Crane...');
+          console.log('[useChat] Sending chat request to Crane with', messages.length, 'messages');
           const craneResponse = await window.electron.crane.chat({
             model: modelName,
             messages,

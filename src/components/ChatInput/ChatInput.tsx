@@ -89,7 +89,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
         }
       }
 
-      // Fetch Ollama models
+      // Fetch Ollama models (always fetch, not exclusive)
       if (window.electron?.ollama) {
         try {
           console.log('ChatInput: Fetching ollama models...');
@@ -118,8 +118,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
     };
 
     fetchModels();
-    const interval = setInterval(fetchModels, 10000);
-    return () => clearInterval(interval);
+    // Only fetch once on mount, no polling
   }, [onModelChange, selectedModel]);
   
   const formatModelName = (modelName: string): string => {

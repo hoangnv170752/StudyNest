@@ -67,16 +67,11 @@ pub fn get_device(device_type: DeviceType) -> Result<Device> {
         }
         
         DeviceType::Auto => {
-            // Try Metal first on macOS
-            #[cfg(target_os = "macos")]
-            {
-                if let Ok(device) = Device::new_metal(0) {
-                    println!("[StudyNest] Using Metal GPU");
-                    return Ok(device);
-                }
-            }
+            // Note: Metal GPU has compatibility issues with some operations (e.g., rms-norm)
+            // For now, we use CPU for better stability
+            // TODO: Re-enable Metal when candle-core fully supports all Qwen operations
             
-            // Try CUDA
+            // Try CUDA first if available
             #[cfg(feature = "cuda")]
             {
                 if let Ok(device) = Device::cuda_if_available(0) {
@@ -87,8 +82,8 @@ pub fn get_device(device_type: DeviceType) -> Result<Device> {
                 }
             }
             
-            // Fallback to CPU
-            println!("[StudyNest] Using CPU");
+            // Use CPU for stability (Metal has rms-norm issues)
+            println!("[StudyNest] Using CPU (Metal GPU disabled due to compatibility issues)");
             Ok(Device::Cpu)
         }
     }
