@@ -26,6 +26,7 @@ interface ChatResponse {
 export class CraneService {
   private process: ChildProcess | null = null;
   private isInitialized = false;
+  private initializedModelPath: string | null = null;
   private requestId = 0;
   private pendingRequests: Map<number, {
     resolve: (value: any) => void;
@@ -59,12 +60,22 @@ export class CraneService {
       }
     } else {
       // Production: use compiled binary from resources
-      const resourcesPath = path.join(app.getAppPath(), '..', 'Resources');
+      const resourcesPath = process.resourcesPath || path.join(app.getAppPath(), '..', 'Resources');
       servicePath = path.join(resourcesPath, 'bin', 'chat-service');
+      
+      console.log('[CraneService] Resources path:', resourcesPath);
+      console.log('[CraneService] Looking for binary at:', servicePath);
       
       // Check if binary exists
       if (!fs.existsSync(servicePath)) {
         throw new Error(`Chat service binary not found at: ${servicePath}`);
+      }
+      
+      // Make sure binary is executable
+      try {
+        fs.chmodSync(servicePath, 0o755);
+      } catch (err) {
+        console.warn('[CraneService] Could not set executable permission:', err);
       }
     }
 
@@ -133,6 +144,7 @@ export class CraneService {
       console.error(`[CraneService] Process exited with code ${code}, signal ${signal}`);
       this.process = null;
       this.isInitialized = false;
+      this.initializedModelPath = null;
       
       // Reject all pending requests
       for (const [id, { reject }] of this.pendingRequests) {
@@ -147,8 +159,8 @@ export class CraneService {
   }
 
   async initialize(modelPath: string): Promise<void> {
-    if (this.isInitialized) {
-      console.log('[CraneService] Already initialized');
+    if (this.isInitialized && this.initializedModelPath === modelPath) {
+      console.log('[CraneService] Model already initialized:', modelPath);
       return;
     }
 
@@ -159,6 +171,7 @@ export class CraneService {
     });
 
     this.isInitialized = true;
+    this.initializedModelPath = modelPath;
     console.log('[CraneService] Model initialized:', response);
   }
 
@@ -253,6 +266,7 @@ export class CraneService {
       this.process.on('exit', () => {
         this.process = null;
         this.isInitialized = false;
+        this.initializedModelPath = null;
         console.log('[CraneService] Service stopped');
         resolve();
       });

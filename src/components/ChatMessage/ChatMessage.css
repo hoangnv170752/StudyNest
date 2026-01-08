@@ -210,3 +210,8 @@
   color: var(--color-text-tertiary);
   margin-top: 0.25rem;
 }
+
+.inference-time {
+  color: var(--color-primary);
+  font-weight: 500;
+}

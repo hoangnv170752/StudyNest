@@ -195,11 +195,13 @@ export const useChat = () => {
       }
       
       const assistantTimestamp = Date.now();
+      const inferenceTime = (assistantTimestamp - userMessage.timestamp) / 1000; // Convert to seconds
       const assistantMessage: Message = {
         id: `msg-${assistantTimestamp}-${Math.random().toString(36).substring(2, 9)}`,
         role: 'assistant',
         content: response,
-        timestamp: assistantTimestamp
+        timestamp: assistantTimestamp,
+        inferenceTime: inferenceTime
       };
 
       if (window.electron?.db) {
