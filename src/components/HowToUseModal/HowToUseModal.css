@@ -118,6 +118,48 @@
   color: var(--color-text-primary);
 }
 
+.method-selector {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.method-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-white-10);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.method-button:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.method-button.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.method-button.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
 .how-to-section {
   margin-bottom: 2rem;
 }

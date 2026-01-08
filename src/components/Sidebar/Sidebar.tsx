@@ -134,7 +134,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           onClick={() => setIsDonationModalOpen(true)}
           aria-label="Support with coffee"
         >
-          <span className="donation-icon">☕</span>
+          <Icon path={mdiCoffee} size={0.9} className="donation-icon" />
           <span className="donation-label">Support with Coffee</span>
         </button>
       </div>
