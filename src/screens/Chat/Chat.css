@@ -13,6 +13,24 @@
   overflow: hidden;
 }
 
+.chat-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid transparent;
+  background: var(--color-background);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  min-height: 48px;
+  transition: all 0.3s ease;
+}
+
+.chat-header:hover {
+  border-bottom-color: var(--color-border);
+}
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;

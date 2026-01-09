@@ -3,6 +3,7 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import ChatMessage from '../../components/ChatMessage/ChatMessage';
 import ChatInput from '../../components/ChatInput/ChatInput';
 import PromptSuggestions from '../../components/PromptSuggestions/PromptSuggestions';
+import PomodoroTimer from '../../components/PomodoroTimer/PomodoroTimer';
 import { useChat } from '../../hooks/useChat';
 import { useTheme } from '../../hooks/useTheme';
 import './Chat.css';
@@ -65,6 +66,10 @@ const Chat: React.FC = () => {
       />
       
       <div className="chat-main">
+        <div className="chat-header">
+          <PomodoroTimer />
+        </div>
+        
         <div className="chat-messages">
           {!currentConversation || currentConversation.messages.length === 0 ? (
             <PromptSuggestions onSelectPrompt={handlePromptSelect} />
