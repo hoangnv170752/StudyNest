@@ -3,9 +3,12 @@ dist/
 release/
 *.log
 .DS_Store
-.env
-.env.local
 .env.development.local
 .env.test.local
 .env.production.local
 crane-studynest/target
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
+config.bat
+branch_structure.json
