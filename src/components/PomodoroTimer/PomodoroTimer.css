@@ -1,0 +1,200 @@
+.pomodoro-timer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.timer-toggle-minimal {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white-10);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+  flex-shrink: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.chat-header:hover .timer-toggle-minimal {
+  opacity: 0.6;
+  visibility: visible;
+}
+
+.timer-toggle-minimal:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  opacity: 1 !important;
+  transform: scale(1.1);
+}
+
+.timer-toggle-minimal:active {
+  transform: scale(1);
+}
+
+.timer-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white-10);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.timer-toggle:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.timer-toggle:active {
+  transform: translateY(0);
+}
+
+.timer-display {
+  position: relative;
+}
+
+.timer-circle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-primary) 0% var(--progress, 0%),
+    var(--color-white-10) var(--progress, 0%) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.timer-circle::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--color-background);
+}
+
+.timer-text {
+  position: relative;
+  z-index: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.timer-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-white-10);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.timer-button:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.timer-button:active {
+  transform: translateY(0);
+}
+
+.total-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--color-border);
+}
+
+.total-time-label {
+  font-size: 0.625rem;
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.total-time-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 768px) {
+  .pomodoro-timer {
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .timer-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .timer-circle::before {
+    width: 42px;
+    height: 42px;
+  }
+
+  .timer-text {
+    font-size: 0.75rem;
+  }
+
+  .timer-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .total-time {
+    padding-left: 0.5rem;
+  }
+
+  .total-time-label {
+    font-size: 0.5rem;
+  }
+
+  .total-time-value {
+    font-size: 0.75rem;
+  }
+}
