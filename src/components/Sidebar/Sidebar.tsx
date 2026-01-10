@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '@mdi/react';
 import { mdiPlus, mdiMessageText, mdiTrashCanOutline, mdiCoffee, mdiPencil } from '@mdi/js';
 import { Conversation } from '../../types/chat';
@@ -6,6 +6,7 @@ import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import DonationModal from '../DonationModal/DonationModal';
 import AuthorModal from '../AuthorModal/AuthorModal';
 import HowToUseModal from '../HowToUseModal/HowToUseModal';
+import SettingsModal from '../SettingsModal/SettingsModal';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -32,8 +33,24 @@ const Sidebar: React.FC<SidebarProps> = ({
   const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
   const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
   const [isHowToUseModalOpen, setIsHowToUseModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [username, setUsername] = useState('Nester');
+
+  useEffect(() => {
+    const savedUsername = localStorage.getItem('studynest_username') || 'Nester';
+    setUsername(savedUsername);
+  }, []);
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedUsername = localStorage.getItem('studynest_username') || 'Nester';
+      setUsername(savedUsername);
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const handleRenameStart = (e: React.MouseEvent, conv: Conversation) => {
     e.stopPropagation();
@@ -115,6 +132,20 @@ const Sidebar: React.FC<SidebarProps> = ({
           <span className="theme-label">Theme</span>
           <ThemeToggle theme={theme} onToggle={onThemeToggle} />
         </div>
+        <button 
+          className="info-link"
+          onClick={() => setIsSettingsModalOpen(true)}
+        >
+          Settings
+        </button>
+         <button 
+          className="donation-button"
+          onClick={() => setIsDonationModalOpen(true)}
+          aria-label="Support with coffee"
+        >
+          <Icon path={mdiCoffee} size={0.9} className="donation-icon" />
+          <span className="donation-label">Support with Coffee</span>
+        </button>
         <div className="model-info">
           <button 
             className="info-link"
@@ -129,14 +160,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             How to use
           </button>
         </div>
-        <button 
-          className="donation-button"
-          onClick={() => setIsDonationModalOpen(true)}
-          aria-label="Support with coffee"
-        >
-          <Icon path={mdiCoffee} size={0.9} className="donation-icon" />
-          <span className="donation-label">Support with Coffee</span>
-        </button>
       </div>
 
       <DonationModal 
@@ -150,6 +173,16 @@ const Sidebar: React.FC<SidebarProps> = ({
       <HowToUseModal 
         isOpen={isHowToUseModalOpen}
         onClose={() => setIsHowToUseModalOpen(false)}
+      />
+      <SettingsModal 
+        isOpen={isSettingsModalOpen}
+        onClose={() => {
+          setIsSettingsModalOpen(false);
+          const savedUsername = localStorage.getItem('studynest_username') || 'Nester';
+          setUsername(savedUsername);
+        }}
+        theme={theme}
+        onThemeToggle={onThemeToggle}
       />
     </div>
   );

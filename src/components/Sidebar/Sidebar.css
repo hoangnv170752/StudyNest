@@ -137,8 +137,8 @@
 }
 
 .theme-label {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   user-select: none;
 }
@@ -146,11 +146,10 @@
 .model-info {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-1);
-  padding: var(--spacing-3);
-  background: var(--color-surface);
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-xs);
+  gap: var(--spacing-2);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
 }
 
 .model-label {
@@ -160,8 +159,9 @@
 .info-link {
   background: none;
   border: none;
-  color: var(--color-text-tertiary);
-  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   text-align: left;
   cursor: pointer;
   padding: 0;
@@ -183,24 +183,23 @@
   align-items: center;
   gap: var(--spacing-2);
   width: 100%;
-  padding: var(--spacing-3);
-  margin-top: var(--spacing-2);
+  padding: 0;
   background: transparent;
   color: var(--color-text-secondary);
   border: none;
-  border-radius: var(--border-radius-md);
+  border-radius: 0;
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all 0.2s ease;
+  text-align: left;
 }
 
 .donation-button:hover {
-  background: var(--color-hover);
-  color: var(--color-text-primary);
+  color: var(--color-primary);
 }
 
 .donation-icon {
-  font-size: 1.2em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,7 +208,6 @@
 .donation-label {
   flex: 1;
   text-align: left;
-  font-weight: var(--font-weight-medium);
 }
 
 .conversations-list::-webkit-scrollbar {
